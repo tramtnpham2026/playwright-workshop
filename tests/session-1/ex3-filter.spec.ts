@@ -11,10 +11,15 @@ import { test, expect } from '@playwright/test';
 //      `exact: true` avoids that kind of surprise.
 // Ask yourself: would your assertion still pass if the filter did nothing at all?
 
-test.fixme('filtering by the Hammer category shows only hammers', async ({ page }) => {
+test('filtering by the Hammer category shows only hammers', async ({ page }) => {
   // TODO 1: open the home page
+  await page.goto('/');
 
   // TODO 2: tick the Hammer category
+  await page.getByRole('checkbox', { name: 'Hammer', exact: true }).check();
 
   // TODO 3: check that every product listed is a hammer, and that the list is not empty
+  const productNames = page.getByTestId('product-name');
+  await expect(productNames.filter({ hasNotText: /hammer/i })).toHaveCount(0);
+  await expect(productNames).not.toHaveCount(0);
 });
